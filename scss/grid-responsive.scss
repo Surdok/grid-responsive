@@ -1,0 +1,49 @@
+ 
+$responsive-levels-list: (
+xs: 562,
+sm: 750,
+md: 850,
+lg: 950,
+xl: 1200);
+
+$grid-systems: (
+2: 2,
+12: 12,
+15: 15
+);
+
+$max-system: 0;
+
+// Find the max grid system
+@each $key,
+$val in $grid-systems {
+@if $max-system < $val {
+  $max-system: $val;
+}
+
+.grid-body-#{$key} {
+  display: grid !important;
+  grid-gap: 15px;
+  grid-template-columns: repeat($val, 1fr);
+  
+}
+}
+
+// Generate grid system similar to bootstrap
+@for $i from 1 through $max-system {
+
+@each $key,
+$val in $responsive-levels-list {
+  @media only screen and (max-width: #{$val - 1}px) {
+    .col-#{$key}-#{$i} {
+      grid-column: span $max-system;
+    }
+  }
+
+  @media only screen and (min-width: #{$val}px) {
+    .col-#{$key}-#{$i} {
+      grid-column: span $i;
+    }
+  }
+}
+}
